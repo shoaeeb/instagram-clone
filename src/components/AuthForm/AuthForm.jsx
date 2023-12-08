@@ -46,12 +46,14 @@ function AuthForm() {
             placeholder={"Email"}
             type={"email"}
             fontSize={14}
+            _placeholder={{ color: "gray.100" }}
           />
           <Input
             onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
             placeholder={"Password"}
             type={"password"}
             fontSize={14}
+            _placeholder={{ color: "gray.100" }}
           />
 
           {!isLogin ? (
@@ -62,6 +64,7 @@ function AuthForm() {
               placeholder={"Confirm Password"}
               type={"password"}
               fontSize={14}
+              _placeholder={{ color: "gray.100" }}
             />
           ) : null}
 
