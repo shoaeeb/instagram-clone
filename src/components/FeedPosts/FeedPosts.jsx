@@ -15,7 +15,7 @@ function FeedPosts() {
     setTimeout(() => setIsLoading(false), 2000);
   }, []);
   return (
-    <Container border={"1px solid red"} maxW={"container.sm"} py={10} px={2}>
+    <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
         [0, 1, 2, 3].map((_, index) => (
           <VStack key={index} gap={4} alignItems={"flex-start"} mb={10}>
