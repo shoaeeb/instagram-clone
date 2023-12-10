@@ -46,7 +46,7 @@ function SuggestedUsers() {
             <Skeleton height="20px" w={"60px"} />
           </Flex>
           {[0, 1, 2].map((_, index) => (
-            <VStack w={"full"}>
+            <VStack key={index} w={"full"}>
               <Flex
                 justifyContent={"space-between"}
                 alignItems={"center"}

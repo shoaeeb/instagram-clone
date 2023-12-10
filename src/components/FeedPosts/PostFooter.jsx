@@ -50,7 +50,7 @@ function PostFooter({ userName, isProfilePage = false }) {
         </>
       )}
       <Flex
-        alignItem={"center"}
+        alignItems={"center"}
         gap={2}
         justifyContent={"space-between"}
         w={"full"}
