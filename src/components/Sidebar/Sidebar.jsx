@@ -1,42 +1,12 @@
-import { Avatar, Box, Flex, Link, Tooltip, Button } from "@chakra-ui/react";
+import { Box, Flex, Link, Tooltip, Button } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import {
-  CreatePostLogo,
-  InstagramLogo,
-  InstagramMobileLogo,
-  NotificationsLogo,
-  SearchLogo,
-} from "../../assets/constants";
-import { AiFillHome } from "react-icons/ai";
+import { InstagramLogo, InstagramMobileLogo } from "../../assets/constants";
 import { BiLogOut } from "react-icons/bi";
 import useLogout from "../../hooks/useLogout";
+import SidebarItems from "./SidebarItems";
 function Sidebar() {
   const { handleLogout, isLoggingOut } = useLogout();
-  const sidebarItems = [
-    {
-      icon: <AiFillHome size={25} />,
-      text: "Home",
-      link: "/",
-    },
 
-    {
-      icon: <SearchLogo />,
-      text: "Search",
-    },
-    {
-      icon: <NotificationsLogo />,
-      text: "Notifications",
-    },
-    {
-      icon: <CreatePostLogo />,
-      text: "Create",
-    },
-    {
-      icon: <Avatar size={"sm"} name="Burak Orkmez" src="/profilepic.png" />,
-      text: "Profile",
-      link: "/asaprogrammer",
-    },
-  ];
   return (
     <Box
       height={"100vh"}
@@ -76,37 +46,7 @@ function Sidebar() {
         </Link>
 
         <Flex gap={5} direction={"column"} cursor={"pointer"}>
-          {sidebarItems.map((item, index) => {
-            return (
-              <Tooltip
-                hasArrow
-                label={item.text}
-                placement={"right"}
-                key={index}
-                ml={1}
-                openDelay={500}
-                display={{ base: "block", md: "none" }}
-              >
-                <Link
-                  display={"flex"}
-                  to={item?.link}
-                  as={RouterLink}
-                  alignItems={"center"}
-                  gap={4}
-                  _hover={{
-                    bg: "whiteAlpha.400",
-                  }}
-                  p={{ md: 1 }}
-                  borderRadius={6}
-                  w={{ base: "10", md: "full" }}
-                  justifyContent={{ base: "center", md: "flex-start" }}
-                >
-                  {item.icon}
-                  <Box display={{ base: "none", md: "block" }}>{item.text}</Box>
-                </Link>
-              </Tooltip>
-            );
-          })}
+          <SidebarItems />
         </Flex>
         {/* LogOut */}
         <Tooltip

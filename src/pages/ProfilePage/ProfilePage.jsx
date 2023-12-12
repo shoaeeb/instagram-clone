@@ -1,9 +1,23 @@
-import { Container, Flex } from "@chakra-ui/react";
+import {
+  Container,
+  Flex,
+  Link,
+  Skeleton,
+  SkeletonCircle,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import ProfileHeader from "../../components/Profile/ProfileHeader";
 import ProfilePosts from "../../components/Profile/ProfilePosts";
 import ProfileTabs from "../../components/Profile/ProfileTabs";
-
+import useGetProfileByUserName from "../../hooks/useGetProfileByUserName";
+import { Link as RouterLink } from "react-router-dom";
 function ProfilePage() {
+  const { username } = useParams();
+  const { userProfile, isLoading } = useGetProfileByUserName(username);
+  const userNotFound = !isLoading && !userProfile;
+  if (userNotFound) return <UserNotFound />;
   return (
     <Container maxW={"container.lg"} py={5}>
       <Flex
@@ -13,7 +27,8 @@ function ProfilePage() {
         w={"full"}
         flexDirection={"column"}
       >
-        <ProfileHeader />
+        {!isLoading && userProfile && <ProfileHeader />}
+        {isLoading && <ProfileHeaderSkeleton />}
       </Flex>
       <Flex
         px={{ base: 2, sm: 4 }}
@@ -31,3 +46,42 @@ function ProfilePage() {
 }
 
 export default ProfilePage;
+
+function ProfileHeaderSkeleton() {
+  return (
+    <Flex
+      gap={{ base: 4, sm: 10 }}
+      py={10}
+      direction={{ base: "column", sm: "row" }}
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
+      <SkeletonCircle size={"24"} />
+      <VStack
+        alignItems={{ base: "center", sm: "flex-start" }}
+        gap={2}
+        mx={"auto"}
+        flex={1}
+      >
+        <Skeleton h={"12px"} width={"150px"} />
+        <Skeleton h={"12px"} width={"100px"} />
+      </VStack>
+    </Flex>
+  );
+}
+function UserNotFound() {
+  return (
+    <Flex flexDir="column" textAlign={"center"} mx={"auto"} my={25}>
+      <Text fontSize={"2xl"}>User Not Found</Text>
+      <Link
+        as={RouterLink}
+        to="/"
+        color={"blue.500"}
+        w={"max-content"}
+        mx={"auto"}
+      >
+        Go Home
+      </Link>
+    </Flex>
+  );
+}

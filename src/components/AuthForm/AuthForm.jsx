@@ -29,7 +29,7 @@ function AuthForm() {
             <Box flex={2} bg={"gray.400"} h={"1px"} />
           </Flex>
         </VStack>
-        <GoogleAuth />
+        <GoogleAuth signUp={!isLogin} />
       </Box>
       {/* switch between login and signup */}
       <Box border={"1px solid gray"} borderRadius={4} padding={4}>

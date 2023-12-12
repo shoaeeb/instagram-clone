@@ -5,9 +5,24 @@ import {
   VStack,
   Text,
   Button,
+  useDisclosure,
 } from "@chakra-ui/react";
+import useFollowAndUnfollowUser from "../../hooks/useFollowAndUnfollowUser";
+import useAuthStore from "../../store/authStore";
+import useUserProfileStore from "../../store/userProfileStore";
+import EditProfile from "./EditProfile";
 
 function ProfileHeader() {
+  const { userProfile } = useUserProfileStore();
+  const { isUpdating, isFollowing, handleFollowUser } =
+    useFollowAndUnfollowUser(userProfile?.uid);
+  const authUser = useAuthStore((state) => state.user);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const visitingOwnProfileAndAuthenticated =
+    authUser && authUser.username === userProfile.username;
+  const visitingOtherProfileAndAuthenticated =
+    authUser && authUser.username !== userProfile.username;
+
   return (
     <Flex
       gap={{ base: 4, sm: 10 }}
@@ -21,9 +36,9 @@ function ProfileHeader() {
         mx={"auto"}
       >
         <Avatar
-          name="as a programmer"
+          name={userProfile.fullName}
           alt="Profile Pic"
-          src="../../../public/profilepic.png"
+          src={userProfile.profilePicURL}
         />
       </AvatarGroup>
       <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>
@@ -34,48 +49,70 @@ function ProfileHeader() {
           alignItems={"center"}
           w={"full"}
         >
-          <Text fontSize={{ base: "sm", md: "lg" }}>ShoaeebOsman </Text>
-          <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
-            <Button
-              bg={"white"}
-              color={"black"}
-              _hover={{ bg: "whiteAlpha.300" }}
-              size={{ base: "xs", md: "sm" }}
-            >
-              Edit Profile
-            </Button>
-          </Flex>
+          <Text fontSize={{ base: "sm", md: "lg" }}>
+            {userProfile.username}
+          </Text>
+          {visitingOwnProfileAndAuthenticated && (
+            <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
+              <Button
+                bg={"white"}
+                color={"black"}
+                _hover={{ bg: "whiteAlpha.300" }}
+                size={{ base: "xs", md: "sm" }}
+                onClick={onOpen}
+              >
+                Edit Profile
+              </Button>
+            </Flex>
+          )}
+
+          {visitingOtherProfileAndAuthenticated && (
+            <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
+              <Button
+                bg={"blue.500"}
+                color={"white"}
+                _hover={{ bg: "blue.500" }}
+                size={{ base: "xs", md: "sm" }}
+                isLoading={isUpdating}
+                onClick={handleFollowUser}
+              >
+                {isFollowing ? "Unfollow" : "Follow"}
+              </Button>
+            </Flex>
+          )}
         </Flex>
         <Flex alignItems={"center"} gap={{ base: 2, sm: 4 }}>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as="span" fontWeight={"bold"} mr={1}>
-              4
+              {userProfile.posts.length}
             </Text>
             Posts
           </Text>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as="span" fontWeight={"bold"} mr={1}>
-              156
+              {userProfile.followers.length}
             </Text>
             Followers
           </Text>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as="span" fontWeight={"bold"} mr={1}>
-              75
+              {userProfile.following.length}
             </Text>
             Following
           </Text>
         </Flex>
         <Flex alignItems={"center"} gap={4}>
           <Text fontSize={"sm"} fontWeight={"Bold"}>
-            Shoaeeb
+            {userProfile.fullName}
           </Text>
         </Flex>
 
         <Text fontSize={"sm"} fontWeight={"medium"}>
-          Nights are Peaceful
+          {userProfile.bio}
         </Text>
       </VStack>
+
+      {isOpen && <EditProfile isOpen={isOpen} onClose={onClose} />}
     </Flex>
   );
 }
