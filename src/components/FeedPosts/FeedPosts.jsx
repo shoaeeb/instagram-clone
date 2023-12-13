@@ -5,15 +5,13 @@ import {
   SkeletonCircle,
   Skeleton,
   Box,
+  Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import useGetFeedPosts from "../../hooks/useGetFeedPosts";
 import FeedPost from "./FeedPost";
 
 function FeedPosts() {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(function () {
-    setTimeout(() => setIsLoading(false), 2000);
-  }, []);
+  const { isLoading, posts } = useGetFeedPosts();
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
@@ -31,28 +29,17 @@ function FeedPosts() {
             </Skeleton>
           </VStack>
         ))}
-      {!isLoading && (
+      {!isLoading &&
+        posts.length > 0 &&
+        posts.map((post) => <FeedPost post={post} key={post.id} />)}
+      {!isLoading && posts.length === 0 && (
         <>
-          <FeedPost
-            img="../../../public/img1.png"
-            userName={"burkorkmez"}
-            avatar="../../../public/img1.png"
-          />
-          <FeedPost
-            img="../../../public/img2.png"
-            userName={"josh"}
-            avatar="../../../public/img2.png"
-          />
-          <FeedPost
-            img="../../../public/img3.png"
-            userName={"janedoe"}
-            avatar="../../../public/img3.png"
-          />
-          <FeedPost
-            img="../../../public/img4.png"
-            userName={"johndoe"}
-            avatar="../../../public/img4.png"
-          />
+          <Text textAlign={"center"} fontSize={"md"} color={"red.400"}>
+            Looks Like You don&apos;t have any friend
+          </Text>
+          <Text textAlign={"center"} color={"red.400"}>
+            Stop coding and go make some!!
+          </Text>
         </>
       )}
     </Container>

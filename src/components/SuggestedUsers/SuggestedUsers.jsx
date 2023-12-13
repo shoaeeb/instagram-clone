@@ -9,14 +9,13 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useState } from "react";
+import useGetSuggestedUsers from "../../hooks/useGetSuggestedUsers";
 import SuggestedHeader from "./SuggestedHeader";
 import SuggestedUser from "./SuggestedUser";
 
 function SuggestedUsers() {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(function () {
-    setTimeout(() => setIsLoading(false), 2000);
-  }, []);
+  const { isLoading, suggestedUsers } = useGetSuggestedUsers();
+
   return (
     <VStack py={8} px={6} gap={4}>
       {isLoading && (
@@ -69,43 +68,33 @@ function SuggestedUsers() {
         <>
           {" "}
           <SuggestedHeader />
-          <Flex
-            alignItems={"center"}
-            w={"full"}
-            justifyContent={"space-between"}
-          >
-            <Text
-              cursor={"pointer"}
-              fontSize={12}
-              fontWeight={"bold"}
-              color={"gray.500"}
+          {suggestedUsers.length > 0 && (
+            <Flex
+              alignItems={"center"}
+              w={"full"}
+              justifyContent={"space-between"}
             >
-              Suggested for you
-            </Text>
-            <Text
-              cursor={"pointer"}
-              fontSize={13}
-              fontWeight={"bold"}
-              color={"white"}
-            >
-              See All
-            </Text>
-          </Flex>
-          <SuggestedUser
-            name={"Dan Abrahmov"}
-            followers={1392}
-            avatar={"https://bit.ly/dan-abramov"}
-          />
-          <SuggestedUser
-            name={"Ryan FLorence"}
-            followers={567}
-            avatar={"https://bit.ly/ryan-florence"}
-          />
-          <SuggestedUser
-            name={"Dan Abrahmov"}
-            followers={759}
-            avatar={"https://bit.ly/code-beast"}
-          />
+              <Text
+                cursor={"pointer"}
+                fontSize={12}
+                fontWeight={"bold"}
+                color={"gray.500"}
+              >
+                Suggested for you
+              </Text>
+              <Text
+                cursor={"pointer"}
+                fontSize={13}
+                fontWeight={"bold"}
+                color={"white"}
+              >
+                See All
+              </Text>
+            </Flex>
+          )}
+          {suggestedUsers.map((user) => (
+            <SuggestedUser user={user} key={user.id} />
+          ))}
           <Box alignSelf={"flex-start"} fontSize={12} color={"gray.500"} mt={5}>
             &copy; {new Date().getFullYear()} Built By{" "}
             <Link

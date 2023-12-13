@@ -18,7 +18,7 @@ function GoogleAuth({ signUp = false }) {
         return;
       }
 
-      const userRef = doc(firestore, "cities", newUser.user.uid);
+      const userRef = doc(firestore, "users", newUser.user.uid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {

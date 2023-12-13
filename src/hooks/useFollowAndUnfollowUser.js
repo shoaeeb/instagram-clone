@@ -11,6 +11,7 @@ function useFollowAndUnfollowUser(userId) {
   const { user: authUser, setUser } = useAuthStore();
   const { userProfile, setUserProfile } = useUserProfileStore();
   const showToast = useShowToast();
+  console.log("userProfile", userProfile);
 
   async function handleFollowUser() {
     setIsUpdating(true);
@@ -32,11 +33,13 @@ function useFollowAndUnfollowUser(userId) {
           ...authUser,
           following: authUser.following.filter((id) => id !== userId),
         });
-
-        setUserProfile({
-          ...userProfile,
-          followers: authUser.followers.filter((id) => id !== authUser.id),
-        });
+        if (userProfile)
+          setUserProfile({
+            ...userProfile,
+            followers: userProfile?.followers?.filter(
+              (id) => id !== authUser.id
+            ),
+          });
         localStorage.setItem(
           "user-info",
           JSON.stringify({
@@ -50,11 +53,11 @@ function useFollowAndUnfollowUser(userId) {
           ...authUser,
           following: [...authUser.following, userId],
         });
-
-        setUserProfile({
-          ...userProfile,
-          followers: [...userProfile.followers, authUser],
-        });
+        if (userProfile)
+          setUserProfile({
+            ...userProfile,
+            followers: [...userProfile?.followers, authUser],
+          });
 
         localStorage.setItem(
           "user-info",
